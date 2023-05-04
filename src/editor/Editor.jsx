@@ -9,6 +9,7 @@ import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
+import ColorPlugin from './plugins/ColorPlugin';
 import theme from './editorTheme';
 
 function onError(error) {
@@ -33,6 +34,7 @@ export default function Editor({ onChange }) {
 
   return (
     <div className="gap-2 bg-gray-200 rounded m-2 p-2">
+      <style>{'#gtx-trans { display: none; }'}</style>
       <LexicalComposer initialConfig={initialConfig}>
         <ToolbarPlugin />
         <div className="relative">
@@ -44,6 +46,7 @@ export default function Editor({ onChange }) {
           <OnChangePlugin onChange={handleChange} />
           <HistoryPlugin />
           <AutoFocusPlugin />
+          <ColorPlugin />
         </div>
       </LexicalComposer>
     </div>

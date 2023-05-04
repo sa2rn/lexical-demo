@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {
   FaAlignCenter,
   FaAlignLeft,
@@ -10,6 +8,8 @@ import {
   FaRedo,
   FaUnderline,
   FaUndo,
+  FaPencilAlt,
+  FaPalette,
 } from 'react-icons/fa';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
@@ -23,35 +23,12 @@ import {
   $isRangeSelection,
   COMMAND_PRIORITY_CRITICAL,
 } from 'lexical';
-import {
-  mergeRegister,
-} from '@lexical/utils';
-
-function ToolbarButton({
-  onClick, disabled = false, isActive = false, children,
-}) {
-  return (
-    <button
-      type="button"
-      className={clsx('flex p-2 text-base rounded', isActive ? 'bg-black/10 text-black' : 'text-gray-600', disabled && 'opacity-50')}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
-  );
-}
-
-ToolbarButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-  disabled: PropTypes.bool,
-  isActive: PropTypes.bool,
-};
-
-function Divider() {
-  return <div className="w-[1px] bg-gray-300" />;
-}
+import { $getSelectionStyleValueForProperty } from '@lexical/selection';
+import { mergeRegister } from '@lexical/utils';
+import ToolbarButton from '../ui/ToolbarButton';
+import Divider from '../ui/Divider';
+import ColorToolbarButton from '../ui/ColorToolbarButton';
+import { CHANGE_BACKGROUND_COLOR, CHANGE_TEXT_COLOR } from './ColorPlugin';
 
 function useToolbarState() {
   const [editor] = useLexicalComposerContext();
@@ -61,16 +38,20 @@ function useToolbarState() {
     isBold: false,
     isItalic: false,
     isUnderline: false,
+    color: '#000',
+    backgroundColor: '#fff',
   });
 
   const $updateToolbar = useCallback(() => {
     const newState = {};
     const selection = $getSelection();
+    console.log($getSelection());
     if ($isRangeSelection(selection)) {
-      // Update text format
       newState.isBold = selection.hasFormat('bold');
       newState.isItalic = selection.hasFormat('italic');
       newState.isUnderline = selection.hasFormat('underline');
+      newState.color = $getSelectionStyleValueForProperty(selection, 'color', '#fff');
+      newState.backgroundColor = $getSelectionStyleValueForProperty(selection, 'background-color', '#000');
     }
     setToolbarState((prev) => ({ ...prev, ...newState }));
   }, []);
@@ -105,11 +86,11 @@ function useToolbarState() {
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const {
-    canRedo, canUndo, isBold, isItalic, isUnderline,
+    canRedo, canUndo, isBold, isItalic, isUnderline, color, backgroundColor,
   } = useToolbarState();
 
   return (
-    <div className="flex sticky gap-1 mb-2">
+    <div className="flex sticky gap-1 mb-2 z-10">
       <ToolbarButton
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND);
@@ -151,6 +132,23 @@ export default function ToolbarPlugin() {
       >
         <FaUnderline />
       </ToolbarButton>
+      <Divider />
+      <ColorToolbarButton
+        onSelect={(selectedColor) => {
+          editor.dispatchCommand(CHANGE_TEXT_COLOR, selectedColor);
+        }}
+        color={color}
+      >
+        <FaPencilAlt />
+      </ColorToolbarButton>
+      <ColorToolbarButton
+        onSelect={(selectedColor) => {
+          editor.dispatchCommand(CHANGE_BACKGROUND_COLOR, selectedColor);
+        }}
+        color={backgroundColor}
+      >
+        <FaPalette />
+      </ColorToolbarButton>
       <Divider />
       <ToolbarButton
         onClick={() => {
