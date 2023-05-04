@@ -30,7 +30,7 @@ import {
 function ToolbarButton({ onClick, disabled = false, isActive = false, children }) {
   return (
     <button
-      className={clsx('flex p-2 text-gray-500 text-base', isActive && 'bg-slate-200 text-black')}
+      className={clsx('flex p-2 text-base rounded', isActive ? 'bg-black/10 text-black' : 'text-gray-600')}
       onClick={onClick}
       disabled={disabled}>
       {children}
@@ -46,7 +46,7 @@ ToolbarButton.propTypes = {
 };
 
 function Divider() {
-  return <div className="w-[1px] bg-gray-400" />
+  return <div className="w-[1px] bg-gray-300" />
 }
 
 function useToolbarState() {
@@ -105,7 +105,7 @@ export default function ToolbarPlugin() {
   const { canRedo, canUndo, isBold, isItalic, isUnderline } = useToolbarState();
 
   return (
-    <div className="flex sticky grid-cols-1 gap-1">
+    <div className="flex sticky gap-1 mb-2">
       <ToolbarButton
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND)

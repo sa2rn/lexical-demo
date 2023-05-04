@@ -9,10 +9,7 @@ import {OnChangePlugin} from '@lexical/react/LexicalOnChangePlugin';
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
-
-const theme = {
-  // Theme styling goes here
-};
+import theme from './editorTheme';
 
 function onError(error) {
   console.error(error);
@@ -35,13 +32,13 @@ export default function Editor({ onChange }) {
   }, [onChange]);
   
   return (
-    <div className="bg-slate-100 rounded m-2 p-2">
+    <div className="gap-2 bg-gray-200 rounded m-2 p-2">
       <LexicalComposer initialConfig={initialConfig}>
         <ToolbarPlugin />
         <div className="relative">
           <RichTextPlugin
-            contentEditable={<ContentEditable className=" bg-white" />}
-            placeholder={<div className="text-gray-400 absolute top-0 left-2">Enter some text...</div>}
+            contentEditable={<ContentEditable className="bg-white p-2 min-h-[140px] outline-0" />}
+            placeholder={<div className="text-gray-400 absolute top-2 left-2">Enter some text...</div>}
             ErrorBoundary={LexicalErrorBoundary}
           />
           <OnChangePlugin onChange={handleChange} />

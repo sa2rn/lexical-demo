@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .quote {
+    @apply ml-2 mb-3 text-sm pl-5 relative;
+  }
+  .quote::before {
+    @apply block w-1 h-[100%] absolute top-0 left-0 bg-gray-700 rounded-sm;
+    content: '';
+  }
+}
+
+@layer utilities {
+  .ltr-dir {
+    direction: ltr;
+  }
+
+  .rtl-dir {
+    direction: rtl;
+  }
+}
