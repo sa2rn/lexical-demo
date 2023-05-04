@@ -1,12 +1,12 @@
-import {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {$generateHtmlFromNodes} from '@lexical/html';
-import {LexicalComposer} from '@lexical/react/LexicalComposer';
-import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
-import {ContentEditable} from '@lexical/react/LexicalContentEditable';
-import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
-import {OnChangePlugin} from '@lexical/react/LexicalOnChangePlugin';
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import { $generateHtmlFromNodes } from '@lexical/html';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import theme from './editorTheme';
@@ -17,7 +17,7 @@ function onError(error) {
 
 export default function Editor({ onChange }) {
   const initialConfig = {
-    namespace: 'MyEditor', 
+    namespace: 'MyEditor',
     theme,
     onError,
   };
@@ -30,7 +30,7 @@ export default function Editor({ onChange }) {
       });
     });
   }, [onChange]);
-  
+
   return (
     <div className="gap-2 bg-gray-200 rounded m-2 p-2">
       <LexicalComposer initialConfig={initialConfig}>

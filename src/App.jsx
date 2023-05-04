@@ -1,3 +1,4 @@
+import React from 'react';
 import { Editor } from './editor';
 
 function App() {
@@ -5,7 +6,7 @@ function App() {
     <div className="grid grid-cols-1 gap-2">
       <Editor onChange={console.log} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

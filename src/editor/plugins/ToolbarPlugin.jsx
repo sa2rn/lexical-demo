@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -9,7 +9,7 @@ import {
   FaItalic,
   FaRedo,
   FaUnderline,
-  FaUndo
+  FaUndo,
 } from 'react-icons/fa';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
@@ -27,12 +27,16 @@ import {
   mergeRegister,
 } from '@lexical/utils';
 
-function ToolbarButton({ onClick, disabled = false, isActive = false, children }) {
+function ToolbarButton({
+  onClick, disabled = false, isActive = false, children,
+}) {
   return (
     <button
-      className={clsx('flex p-2 text-base rounded', isActive ? 'bg-black/10 text-black' : 'text-gray-600')}
+      type="button"
+      className={clsx('flex p-2 text-base rounded', isActive ? 'bg-black/10 text-black' : 'text-gray-600', disabled && 'opacity-50')}
       onClick={onClick}
-      disabled={disabled}>
+      disabled={disabled}
+    >
       {children}
     </button>
   );
@@ -46,7 +50,7 @@ ToolbarButton.propTypes = {
 };
 
 function Divider() {
-  return <div className="w-[1px] bg-gray-300" />
+  return <div className="w-[1px] bg-gray-300" />;
 }
 
 function useToolbarState() {
@@ -60,107 +64,115 @@ function useToolbarState() {
   });
 
   const $updateToolbar = useCallback(() => {
-      const newState = {};
-      const selection = $getSelection();
-      if ($isRangeSelection(selection)) {
-        // Update text format
-        newState.isBold = selection.hasFormat('bold');
-        newState.isItalic = selection.hasFormat('italic');
-        newState.isUnderline = selection.hasFormat('underline');
-      }
-      setToolbarState((prev) => ({ ...prev, ...newState }));
+    const newState = {};
+    const selection = $getSelection();
+    if ($isRangeSelection(selection)) {
+      // Update text format
+      newState.isBold = selection.hasFormat('bold');
+      newState.isItalic = selection.hasFormat('italic');
+      newState.isUnderline = selection.hasFormat('underline');
+    }
+    setToolbarState((prev) => ({ ...prev, ...newState }));
   }, []);
 
-  useEffect(() => {
-    return mergeRegister(
-      editor.registerUpdateListener(({ editorState }) => {
-        editorState.read(() => {
-          $updateToolbar();
-        });
-      }),
-      editor.registerCommand(
-        CAN_UNDO_COMMAND,
-        (payload) => {
-          setToolbarState((prev) => ({ ...prev, canUndo: payload }));
-          return false;
-        },
-        COMMAND_PRIORITY_CRITICAL,
-      ),
-      editor.registerCommand(
-        CAN_REDO_COMMAND,
-        (payload) => {
-          setToolbarState((prev) => ({ ...prev, canRedo: payload }));
-          return false;
-        },
-        COMMAND_PRIORITY_CRITICAL,
-      ),
-    );
-  }, [editor, $updateToolbar]);
+  useEffect(() => mergeRegister(
+    editor.registerUpdateListener(({ editorState }) => {
+      editorState.read(() => {
+        $updateToolbar();
+      });
+    }),
+    editor.registerCommand(
+      CAN_UNDO_COMMAND,
+      (payload) => {
+        setToolbarState((prev) => ({ ...prev, canUndo: payload }));
+        return false;
+      },
+      COMMAND_PRIORITY_CRITICAL,
+    ),
+    editor.registerCommand(
+      CAN_REDO_COMMAND,
+      (payload) => {
+        setToolbarState((prev) => ({ ...prev, canRedo: payload }));
+        return false;
+      },
+      COMMAND_PRIORITY_CRITICAL,
+    ),
+  ), [editor, $updateToolbar]);
 
   return toolbarState;
 }
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
-  const { canRedo, canUndo, isBold, isItalic, isUnderline } = useToolbarState();
+  const {
+    canRedo, canUndo, isBold, isItalic, isUnderline,
+  } = useToolbarState();
 
   return (
     <div className="flex sticky gap-1 mb-2">
       <ToolbarButton
         onClick={() => {
-          editor.dispatchCommand(UNDO_COMMAND)
+          editor.dispatchCommand(UNDO_COMMAND);
         }}
-        disabled={!canUndo}>
+        disabled={!canUndo}
+      >
         <FaUndo />
       </ToolbarButton>
       <ToolbarButton
         onClick={() => {
-          editor.dispatchCommand(REDO_COMMAND)
+          editor.dispatchCommand(REDO_COMMAND);
         }}
-        disabled={!canRedo}>
+        disabled={!canRedo}
+      >
         <FaRedo />
       </ToolbarButton>
       <Divider />
       <ToolbarButton
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
         }}
-        isActive={isBold}>
+        isActive={isBold}
+      >
         <FaBold />
       </ToolbarButton>
       <ToolbarButton
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
         }}
-        isActive={isItalic}>
+        isActive={isItalic}
+      >
         <FaItalic />
       </ToolbarButton>
       <ToolbarButton
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
         }}
-        isActive={isUnderline}>
+        isActive={isUnderline}
+      >
         <FaUnderline />
       </ToolbarButton>
       <Divider />
       <ToolbarButton
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left')
-        }}>
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
+        }}
+      >
         <FaAlignLeft />
       </ToolbarButton>
       <ToolbarButton
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center')
-        }}>
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
+        }}
+      >
         <FaAlignCenter />
       </ToolbarButton>
       <ToolbarButton
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right')
-        }}>
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
+        }}
+      >
         <FaAlignRight />
       </ToolbarButton>
     </div>
-  )
+  );
 }
