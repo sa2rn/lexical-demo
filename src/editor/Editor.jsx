@@ -12,6 +12,7 @@ import theme from './editorTheme';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ColorPlugin from './plugins/ColorPlugin';
 import BlockPlugin from './plugins/BlockPlugin';
+import TreeViewPlugin from './plugins/TreeViewPlugin';
 
 function onError(error) {
   console.error(error);
@@ -34,24 +35,27 @@ export default function Editor({ onChange }) {
   }, [onChange]);
 
   return (
-    <div className="gap-2 bg-gray-200 rounded m-2 p-2">
+    <>
       <style>{'#gtx-trans { display: none; }'}</style>
       <LexicalComposer initialConfig={initialConfig}>
-        <ToolbarPlugin />
-        <div className="relative">
-          <RichTextPlugin
-            contentEditable={<ContentEditable className="bg-white p-2 min-h-[140px] outline-0" />}
-            placeholder={<div className="text-gray-400 absolute top-2 left-2">Enter some text...</div>}
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <OnChangePlugin onChange={handleChange} />
-          <HistoryPlugin />
-          <AutoFocusPlugin />
-          <ColorPlugin />
-          <BlockPlugin />
+        <div className="gap-2 bg-gray-200 rounded p-2">
+          <ToolbarPlugin />
+          <div className="relative">
+            <RichTextPlugin
+              contentEditable={<ContentEditable className="bg-white p-2 min-h-[140px] outline-0" />}
+              placeholder={<div className="text-gray-400 absolute top-2 left-2">Enter some text...</div>}
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+          </div>
         </div>
+        <OnChangePlugin onChange={handleChange} />
+        <HistoryPlugin />
+        <AutoFocusPlugin />
+        <ColorPlugin />
+        <BlockPlugin />
+        <TreeViewPlugin />
       </LexicalComposer>
-    </div>
+    </>
   );
 }
 

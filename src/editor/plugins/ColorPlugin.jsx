@@ -9,8 +9,8 @@ import {
 import { $patchStyleText } from '@lexical/selection';
 import { mergeRegister } from '@lexical/utils';
 
-export const CHANGE_TEXT_COLOR = createCommand();
-export const CHANGE_BACKGROUND_COLOR = createCommand();
+export const CHANGE_TEXT_COLOR = createCommand('CHANGE_TEXT_COLOR');
+export const CHANGE_BACKGROUND_COLOR = createCommand('CHANGE_BACKGROUND_COLOR');
 
 export default function ColorPlugin() {
   const [editor] = useLexicalComposerContext();
