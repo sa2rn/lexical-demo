@@ -8,9 +8,10 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
+import theme from './editorTheme';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ColorPlugin from './plugins/ColorPlugin';
-import theme from './editorTheme';
+import BlockPlugin from './plugins/BlockPlugin';
 
 function onError(error) {
   console.error(error);
@@ -47,6 +48,7 @@ export default function Editor({ onChange }) {
           <HistoryPlugin />
           <AutoFocusPlugin />
           <ColorPlugin />
+          <BlockPlugin />
         </div>
       </LexicalComposer>
     </div>

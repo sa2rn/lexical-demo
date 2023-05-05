@@ -22,6 +22,7 @@ import {
   $getSelection,
   $isRangeSelection,
   COMMAND_PRIORITY_CRITICAL,
+  COMMAND_PRIORITY_NORMAL,
 } from 'lexical';
 import { $getSelectionStyleValueForProperty } from '@lexical/selection';
 import { mergeRegister } from '@lexical/utils';
@@ -45,7 +46,6 @@ function useToolbarState() {
   const $updateToolbar = useCallback(() => {
     const newState = {};
     const selection = $getSelection();
-    console.log($getSelection());
     if ($isRangeSelection(selection)) {
       newState.isBold = selection.hasFormat('bold');
       newState.isItalic = selection.hasFormat('italic');
@@ -66,7 +66,6 @@ function useToolbarState() {
       CAN_UNDO_COMMAND,
       (payload) => {
         setToolbarState((prev) => ({ ...prev, canUndo: payload }));
-        return false;
       },
       COMMAND_PRIORITY_CRITICAL,
     ),
@@ -74,9 +73,22 @@ function useToolbarState() {
       CAN_REDO_COMMAND,
       (payload) => {
         setToolbarState((prev) => ({ ...prev, canRedo: payload }));
-        return false;
       },
       COMMAND_PRIORITY_CRITICAL,
+    ),
+    editor.registerCommand(
+      CHANGE_TEXT_COLOR,
+      (payload) => {
+        setToolbarState((prev) => ({ ...prev, color: payload }));
+      },
+      COMMAND_PRIORITY_NORMAL,
+    ),
+    editor.registerCommand(
+      CHANGE_BACKGROUND_COLOR,
+      (payload) => {
+        setToolbarState((prev) => ({ ...prev, backgroundColor: payload }));
+      },
+      COMMAND_PRIORITY_NORMAL,
     ),
   ), [editor, $updateToolbar]);
 
@@ -92,6 +104,7 @@ export default function ToolbarPlugin() {
   return (
     <div className="flex sticky gap-1 mb-2 z-10">
       <ToolbarButton
+        title="Undo"
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND);
         }}
@@ -100,6 +113,7 @@ export default function ToolbarPlugin() {
         <FaUndo />
       </ToolbarButton>
       <ToolbarButton
+        title="Redo"
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND);
         }}
@@ -109,6 +123,7 @@ export default function ToolbarPlugin() {
       </ToolbarButton>
       <Divider />
       <ToolbarButton
+        title="Bold"
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
         }}
@@ -117,6 +132,7 @@ export default function ToolbarPlugin() {
         <FaBold />
       </ToolbarButton>
       <ToolbarButton
+        title="Italic"
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
         }}
@@ -125,6 +141,7 @@ export default function ToolbarPlugin() {
         <FaItalic />
       </ToolbarButton>
       <ToolbarButton
+        title="Underline"
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
         }}
@@ -134,6 +151,7 @@ export default function ToolbarPlugin() {
       </ToolbarButton>
       <Divider />
       <ColorToolbarButton
+        title="Text color"
         onSelect={(selectedColor) => {
           editor.dispatchCommand(CHANGE_TEXT_COLOR, selectedColor);
         }}
@@ -142,6 +160,7 @@ export default function ToolbarPlugin() {
         <FaPencilAlt />
       </ColorToolbarButton>
       <ColorToolbarButton
+        title="Background color"
         onSelect={(selectedColor) => {
           editor.dispatchCommand(CHANGE_BACKGROUND_COLOR, selectedColor);
         }}
@@ -151,6 +170,7 @@ export default function ToolbarPlugin() {
       </ColorToolbarButton>
       <Divider />
       <ToolbarButton
+        title="Align left"
         onClick={() => {
           editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
         }}
@@ -158,6 +178,7 @@ export default function ToolbarPlugin() {
         <FaAlignLeft />
       </ToolbarButton>
       <ToolbarButton
+        title="Align center"
         onClick={() => {
           editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
         }}
@@ -165,6 +186,7 @@ export default function ToolbarPlugin() {
         <FaAlignCenter />
       </ToolbarButton>
       <ToolbarButton
+        title="Align right"
         onClick={() => {
           editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
         }}
