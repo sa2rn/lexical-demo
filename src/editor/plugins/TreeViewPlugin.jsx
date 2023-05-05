@@ -4,6 +4,7 @@ import * as React from 'react';
 
 export default function TreeViewPlugin() {
   const [editor] = useLexicalComposerContext();
+
   return (
     <TreeView
       viewClassName="block bg-gray-200 text-black p-2 text-xs mb-2 relative overflow-hidden"

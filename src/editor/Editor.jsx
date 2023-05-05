@@ -8,10 +8,12 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
+import { HeadingNode, QuoteNode } from '@lexical/rich-text';
+import { ListItemNode, ListNode } from '@lexical/list';
 import theme from './editorTheme';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ColorPlugin from './plugins/ColorPlugin';
-import BlockPlugin from './plugins/BlockPlugin';
+import BlockTypePlugin from './plugins/BlockTypePlugin';
 import TreeViewPlugin from './plugins/TreeViewPlugin';
 
 function onError(error) {
@@ -23,6 +25,12 @@ export default function Editor({ onChange }) {
     namespace: 'MyEditor',
     theme,
     onError,
+    nodes: [
+      HeadingNode,
+      QuoteNode,
+      ListNode,
+      ListItemNode,
+    ],
   };
 
   const handleChange = useCallback((editorState, editor) => {
@@ -52,7 +60,7 @@ export default function Editor({ onChange }) {
         <HistoryPlugin />
         <AutoFocusPlugin />
         <ColorPlugin />
-        <BlockPlugin />
+        <BlockTypePlugin />
         <TreeViewPlugin />
       </LexicalComposer>
     </>

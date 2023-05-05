@@ -26,10 +26,11 @@ import {
 } from 'lexical';
 import { $getSelectionStyleValueForProperty } from '@lexical/selection';
 import { mergeRegister } from '@lexical/utils';
-import ToolbarButton from '../ui/ToolbarButton';
-import Divider from '../ui/Divider';
-import ColorToolbarButton from '../ui/ColorToolbarButton';
+import {
+  ToolbarButton, Divider, ColorToolbarButton, BlockTypeToolbarButton,
+} from '../ui';
 import { CHANGE_BACKGROUND_COLOR, CHANGE_TEXT_COLOR } from './ColorPlugin';
+import { CHANGE_BLOCK_TYPE } from './BlockTypePlugin';
 
 function useToolbarState() {
   const [editor] = useLexicalComposerContext();
@@ -41,6 +42,7 @@ function useToolbarState() {
     isUnderline: false,
     color: '#000',
     backgroundColor: '#fff',
+    blockType: 'p',
   });
 
   const $updateToolbar = useCallback(() => {
@@ -90,6 +92,13 @@ function useToolbarState() {
       },
       COMMAND_PRIORITY_NORMAL,
     ),
+    editor.registerCommand(
+      CHANGE_BLOCK_TYPE,
+      (payload) => {
+        setToolbarState((prev) => ({ ...prev, blockType: payload }));
+      },
+      COMMAND_PRIORITY_NORMAL,
+    ),
   ), [editor, $updateToolbar]);
 
   return toolbarState;
@@ -98,7 +107,7 @@ function useToolbarState() {
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const {
-    canRedo, canUndo, isBold, isItalic, isUnderline, color, backgroundColor,
+    canRedo, canUndo, isBold, isItalic, isUnderline, color, backgroundColor, blockType,
   } = useToolbarState();
 
   return (
@@ -121,6 +130,14 @@ export default function ToolbarPlugin() {
       >
         <FaRedo />
       </ToolbarButton>
+      <Divider />
+      <BlockTypeToolbarButton
+        title="Choose block type"
+        blockType={blockType}
+        onSelect={(newBlockType) => {
+          editor.dispatchCommand(CHANGE_BLOCK_TYPE, newBlockType);
+        }}
+      />
       <Divider />
       <ToolbarButton
         title="Bold"

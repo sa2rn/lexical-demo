@@ -1,22 +1,23 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { forwardRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-const ToolbarButton = forwardRef(({
+export default function ToolbarButton({
   onClick, title, disabled = false, isActive = false, children,
-}, ref) => (
-  <button
-    ref={ref}
-    type="button"
-    className={clsx('flex p-2 text-base rounded', isActive ? 'bg-black/10 text-black' : 'text-gray-600', disabled && 'opacity-50')}
-    onClick={onClick}
-    disabled={disabled}
-    title={title}
-  >
-    {children}
-  </button>
-));
+}) {
+  return (
+    <button
+      type="button"
+      className={clsx('inline-flex items-center gap-1 p-2 text-base rounded', isActive ? 'bg-black/10 text-black' : 'text-gray-600', disabled && 'opacity-50')}
+      onClick={onClick}
+      disabled={disabled}
+      title={title}
+    >
+      {children}
+    </button>
+  );
+}
 
 ToolbarButton.propTypes = {
   onClick: PropTypes.func,
@@ -25,5 +26,3 @@ ToolbarButton.propTypes = {
   disabled: PropTypes.bool,
   isActive: PropTypes.bool,
 };
-
-export default ToolbarButton;
