@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { HexColorPicker } from 'react-colorful';
 import ToolbarButton from './ToolbarButton';
+import { DropDown, DropDownButton, DropDownPanel } from './DropDown';
 
 export default function ColorToolbarButton({
   children, title, color, onSelect,
 }) {
-  const [isOpen, toggle] = useState(false);
-
   return (
-    <div className="relative">
-      <ToolbarButton title={title} onClick={() => toggle((prev) => !prev)}>
+    <DropDown>
+      <DropDownButton as={ToolbarButton} title={title}>
         {children}
-      </ToolbarButton>
-      {isOpen && (
-        <div className="absolute bg-white border border-gray-300">
-          <HexColorPicker color={color} onChange={onSelect} />
-        </div>
-      )}
-    </div>
+      </DropDownButton>
+      <DropDownPanel>
+        <HexColorPicker color={color} onChange={onSelect} />
+      </DropDownPanel>
+    </DropDown>
   );
 }
 
