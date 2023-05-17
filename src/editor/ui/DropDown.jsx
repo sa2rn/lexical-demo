@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, {
+import {
   createContext, useCallback, useContext, useMemo, useRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';

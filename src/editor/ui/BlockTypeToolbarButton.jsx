@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FaCaretDown } from 'react-icons/fa';
 import ToolbarButton from './ToolbarButton';

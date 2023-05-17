@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   FaAlignCenter,
   FaAlignLeft,
@@ -23,6 +23,7 @@ import {
   $isRangeSelection,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_NORMAL,
+  SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import { $getSelectionStyleValueForProperty } from '@lexical/selection';
 import { mergeRegister } from '@lexical/utils';
@@ -57,6 +58,15 @@ function useToolbarState() {
     }
     setToolbarState((prev) => ({ ...prev, ...newState }));
   }, []);
+
+  useEffect(() => editor.registerCommand(
+    SELECTION_CHANGE_COMMAND,
+    (_payload, newEditor) => {
+      console.log('selection changed', newEditor === editor);
+      return false;
+    },
+    COMMAND_PRIORITY_CRITICAL,
+  ), [editor]);
 
   useEffect(() => mergeRegister(
     editor.registerUpdateListener(({ editorState }) => {

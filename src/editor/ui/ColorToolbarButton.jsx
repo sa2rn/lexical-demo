@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { HexColorPicker } from 'react-colorful';
 import ToolbarButton from './ToolbarButton';
